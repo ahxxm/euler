@@ -736,7 +736,16 @@
      (reduce +))
 
 ;; 38: Pandigital multiples
-;;
+;; greedy cut: 4-digit * 2, 4+5 to pandigital
+(defn double-pan?
+  [n]
+  (let [k      (* n 2)
+        digits (into #{} (str n k))]
+    (= digits #{\1 \2 \3 \4 \5 \6 \7 \8 \9})))
+
+(->> (range 9999 5000 -1)
+     (filter double-pan?)
+     first)
 
 
 (defn main
