@@ -747,6 +747,33 @@
      (filter double-pan?)
      first)
 
+;; 39: Integer right triangles
+;; a + b + c <= 1000
+;; a*a+b*b=c*c
+;; a,b,c => int
+(defn count-triangles
+  [p]
+(let [;p     120
+      half  (int (/ p 2))
+      pairs (atom #{})]
+  (loop [a 1
+         b 1]
+    (if (= a half)
+      [p (count @pairs)]
+      (if (= b half)
+        (recur (inc a) 1)
+        (let [c (- p a b)]
+          (when (= (* c c)
+                   (+ (* a a) (* b b)))
+            (swap! pairs conj #{a b}))
+          (recur a (inc b))))))))
+
+(->> (range 20 1000)
+     (map count-triangles)
+     (into (sorted-map))
+     (apply max-key val)
+     first)
+
 
 (defn main
   "I don't do a whole lot."
