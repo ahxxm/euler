@@ -1,9 +1,8 @@
 (ns euler.core
   (:require [clojure.string :as str]
-            [euler.helpers :refer [factors is-palindrome gcd lcm factorial divisors is-prime? exp num->digits]])
+            [euler.helpers :refer [factors is-palindrome gcd lcm factorial divisors is-prime? exp num->digits]]
+            [clojure.math.combinatorics :as comb :refer [count-combinations]])
   (:gen-class))
-
-;; Trying to be as clear
 
 ;; 1
 ;;If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
@@ -320,7 +319,6 @@
 
 ;; 15:
 ;; 20×20 grid, only right and down
-(use 'clojure.math.combinatorics)
 (count-combinations (range 0 40) 20)
 
 ;; 16:
