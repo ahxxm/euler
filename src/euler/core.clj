@@ -775,6 +775,19 @@
      first)
 
 
+;; Champernowne's constant
+;; An irrational decimal fraction is created by concatenating the positive integers:
+;; 0.123456789101112131415161718192021...
+;; d(x) is x th digit
+;; d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000
+
+(let [digits (->> (iterate inc 0)  ;; since nth is 0-based index
+                  (map str)
+                  (apply concat)
+                  (take 1000001))]
+  (reduce * (map #(- (int (nth digits %)) 48)
+                 [1 10 100 1000 10000 100000 1000000])))
+
 (defn main
   "I don't do a whole lot."
   [x]
