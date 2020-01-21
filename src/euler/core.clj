@@ -1,6 +1,6 @@
 (ns euler.core
   (:require [clojure.string :as str]
-            [euler.helpers :refer [factors is-palindrome gcd lcm factorial divisors is-prime? exp num->digits]]
+            [euler.helpers :refer [factors is-palindrome gcd lcm factorial divisors is-prime? exp num->digits is-pandigital? prod-concat-pandigital?]]
             [clojure.math.combinatorics :as comb :refer [count-combinations]])
   (:gen-class))
 
@@ -597,16 +597,6 @@
 ;; n-digit number is pandigital if it makes use of all the digits 1 to n exactly once
 ;; The product 7254 is unusual, as the identity, 39 × 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
 ;; Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
-
-(defn is-pandigital?
-  [a b]
-  (let [prod (* a b)
-        strs (str a b prod)]
-    ;; 9 digits
-    (and (= (count strs) 9)
-         ;; 1-9
-         (= #{\1 \2 \3 \4 \5 \6 \7 \8 \9} (into #{} strs)) )))
-
 ;; http://www.worldofnumbers.com/ninedig1.htm
 ;; 4*1963 is one answer..
 (let [s (atom #{})]
@@ -617,7 +607,7 @@
       (if (= b 2000)
         (recur (inc a) 1)
         (let [prod (* a b)]
-          (when (is-pandigital? a b)
+          (when (prod-concat-pandigital? a b)
             (swap! s conj prod))
           (recur a (inc b))))))
   (reduce + @s))
@@ -775,7 +765,7 @@
      first)
 
 
-;; Champernowne's constant
+;; 40: Champernowne's constant
 ;; An irrational decimal fraction is created by concatenating the positive integers:
 ;; 0.123456789101112131415161718192021...
 ;; d(x) is x th digit
@@ -787,6 +777,14 @@
                   (take 1000001))]
   (reduce * (map #(- (int (nth digits %)) 48)
                  [1 10 100 1000 10000 100000 1000000])))
+
+;; 41: Pandigital prime
+;; FIXME: make faster to run above 10M
+(->> (iterate dec 9999999)
+     (filter is-prime?)
+     (filter is-pandigital?)
+     (take 1))
+
 
 (defn main
   "I don't do a whole lot."

@@ -47,3 +47,22 @@
 (defn num->digits
   [n]
   (map #(- (int %) 48) (seq (str n))))
+
+(defn is-pandigital?
+  [a]
+  (let [-chars (into #{} (str a))
+        d      (count -chars)
+        dd     (count (str a))
+        digits (into #{} (take dd [\1 \2 \3 \4 \5 \6 \7 \8 \9]))]
+    (and (= d dd) ;; exactly once
+         ;; 1-n
+         (= digits -chars))))
+
+(defn prod-concat-pandigital?
+  [a b]
+  (let [prod (* a b)
+        strs (str a b prod)]
+    ;; 9 digits
+    (and (= (count strs) 9)
+         ;; 1-9
+         (= #{\1 \2 \3 \4 \5 \6 \7 \8 \9} (into #{} strs)) )))
