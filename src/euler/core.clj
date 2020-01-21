@@ -1,7 +1,7 @@
 (ns euler.core
   (:require [clojure.string :as str]
             [euler.helpers :refer [factors is-palindrome gcd lcm factorial divisors is-prime? exp num->digits is-pandigital? prod-concat-pandigital?]]
-            [clojure.math.combinatorics :as comb :refer [count-combinations]])
+            [clojure.math.combinatorics :as comb :refer [count-combinations permutations]])
   (:gen-class))
 
 ;; 1
@@ -804,6 +804,24 @@
 (->> (map word->score words)
      (filter #(triangles %))
      count)
+
+;; 43: Sub-string divisibility
+(->> (permutations [0 1 2 3 4 5 6 7 8 9])
+     ;; or permutate from 1 0 2 3 4 5 6 6 7 8 9
+     (filter #(not= 0 (nth % 0)))
+     (filter (fn [coll]
+               (and (= 0 (mod (nth coll 3) 2))
+                    (= 0 (mod (+ (nth coll 2) (nth coll 3) (nth coll 4)) 3))
+                    (or (= 0 (nth coll 5)) (= 5 (nth coll 5)))
+                    (= 0 (mod (+ (* 100 (nth coll 4)) (* 10 (nth coll 5)) (nth coll 6)) 7))
+                    (= 0 (mod (+ (* 100 (nth coll 5)) (* 10 (nth coll 6)) (nth coll 7)) 11))
+                    (= 0 (mod (+ (* 100 (nth coll 6)) (* 10 (nth coll 7)) (nth coll 8)) 13))
+                    (= 0 (mod (+ (* 100 (nth coll 7)) (* 10 (nth coll 8)) (nth coll 9)) 17))
+                    )))
+     (map #(BigDecimal. (apply str %)))
+     (reduce +))
+
+
 
 (defn main
   "I don't do a whole lot."
