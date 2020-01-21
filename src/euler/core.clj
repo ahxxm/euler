@@ -779,12 +779,31 @@
                  [1 10 100 1000 10000 100000 1000000])))
 
 ;; 41: Pandigital prime
-;; FIXME: make faster to run above 10M
+;; all 8&9 digits numbers can be divided by 3 <= 1+2+3..+8=36
 (->> (iterate dec 9999999)
      (filter is-prime?)
      (filter is-pandigital?)
      (take 1))
 
+
+;; 42: Coded triangle numbers
+(def -words (slurp "https://projecteuler.net/project/resources/p042_words.txt"))
+(def words (map #(str/replace % "\"" "") (str/split -words #",")))
+
+(defn word->score
+  [w]
+  (let [l (str/lower-case w)]
+    (reduce + (map #(- (int %) 96) (seq l)))))
+
+(def triangles
+  (->> (iterate inc 0)
+       (take 1000)
+       (map #(/ (* % (inc %)) 2))
+       (into #{})))
+
+(->> (map word->score words)
+     (filter #(triangles %))
+     count)
 
 (defn main
   "I don't do a whole lot."
