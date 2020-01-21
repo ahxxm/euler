@@ -825,7 +825,7 @@
 ;; 44: Pentagon numbers
 ;; n * (3n-1) / 2
 ;; Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D = |Pk − Pj| is minimised; what is the value of D?
-(let [-nums (->> (iterate inc 1)  ;; since nth is 0-based index
+(let [-nums (->> (iterate inc 1)
                  (map #(/ (* % (- (* % 3) 1)) 2))
                  (take 2500))
       nums  (vec -nums)
@@ -833,6 +833,21 @@
   (->> (comb/selections nums 2)
        (filter (fn [[a b]] (and (numss (Math/abs (- a b)))
                                 (numss (+ a b)))))))
+
+;; 45: Triangular, pentagonal, and hexagonal
+(let [-tri (->> (iterate inc 1)
+                (map #(/ (* % (inc %)) 2))
+                (take 100000))
+      -pen (->> (iterate inc 1)
+                (map #(/ (* % (- (* % 3) 1)) 2))
+                (take 100000))
+      -hex (->> (iterate inc 1)
+                (map #(* % (- (* % 2) 1)))
+                (take 100000))
+      tri  (into #{} -tri)
+      pen  (into #{} -pen)
+      hex  (into #{} -hex)]
+  (clojure.set/intersection tri pen hex))
 
 (defn main
   "I don't do a whole lot."
