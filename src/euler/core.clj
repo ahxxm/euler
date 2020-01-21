@@ -822,6 +822,17 @@
      (reduce +))
 
 
+;; 44: Pentagon numbers
+;; n * (3n-1) / 2
+;; Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D = |Pk − Pj| is minimised; what is the value of D?
+(let [-nums (->> (iterate inc 1)  ;; since nth is 0-based index
+                 (map #(/ (* % (- (* % 3) 1)) 2))
+                 (take 2500))
+      nums  (vec -nums)
+      numss (into #{} nums)]
+  (->> (comb/selections nums 2)
+       (filter (fn [[a b]] (and (numss (Math/abs (- a b)))
+                                (numss (+ a b)))))))
 
 (defn main
   "I don't do a whole lot."
