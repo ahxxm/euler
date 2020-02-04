@@ -8,7 +8,7 @@
 ;;If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
 ;;Find the sum of all the multiples of 3 or 5 below 1000.
 
-(->> (range 0 1000)
+#_(->> (range 0 1000)
      (filter #(or (= 0 (mod % 3))
                   (= 0 (mod % 5))))
      (reduce +))
@@ -16,7 +16,7 @@
 
 ;; 2: Even Fibonacci numbers
 ;; sum when < 4Million
-(let [a (atom 1)
+#_(let [a (atom 1)
       b (atom 2)]
   (defn fib
     [n]
@@ -25,7 +25,7 @@
       (reset! b c)
       c)))
 
-(->> (iterate fib 0)
+#_(->> (iterate fib 0)
      (take-while #(< % 4000000))
      (filter even?)
      (reduce +)
@@ -33,7 +33,7 @@
 
 
 ;; 3: Largest prime factor
-(->> (factors 600851475143)
+#_(->> (factors 600851475143)
      (filter is-prime?)
      (apply max))
 
@@ -43,7 +43,7 @@
 
 ;; Find the largest palindrome made from the product of two 3-digit numbers.
 
-(->> (for [k (range 100 1000)
+#_(->> (for [k (range 100 1000)
            j (range 100 1000)]
        (* k j))
      (filter is-palindrome)
@@ -51,11 +51,11 @@
 
 ;; 5: What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
 ;; https://rosettacode.org/wiki/Least_common_multiple#Clojure
-(reduce lcm (range 2 20))
+#_(reduce lcm (range 2 20))
 
 ;; 6: Sum square difference
 
-(let [numbers (vec (range 1 101))
+#_(let [numbers (vec (range 1 101))
       s       (reduce + numbers)
       sum-sq  (* s s)
       sq-sum  (reduce + (map #(* % %) numbers))]
@@ -63,7 +63,7 @@
 
 ;; 7: 10001st prime
 ;; see 3 for is-prime
-(->> (iterate inc 2)
+#_(->> (iterate inc 2)
      (filter is-prime?)
      (take 10001)
      last)
@@ -72,7 +72,7 @@
 ;; 8: Largest product in a series
 (def series "7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450")
 
-(let [v (vec series)
+#_(let [v (vec series)
       j (- (count series) 13)
       r (atom 0)]
   (loop [i 0]
@@ -89,7 +89,7 @@
 ;; - a*a+b*b=c*c
 ;; a + b + c = 1000
 
-(for [a (range 1 1000)
+#_(for [a (range 1 1000)
       b (range 1 1000)
       :let [c (- 1000 a b)]
       :when (and (> c 0)
@@ -100,7 +100,7 @@
 ;; 10:
 ;; Find the sum of all the primes below two million.
 ;; TODO: this is slow, how to make it faster?
-(->> (iterate inc 2)
+#_(->> (iterate inc 2)
      (filter is-prime?)
      (take-while #(< % 2000000))
      (reduce +))
@@ -130,7 +130,7 @@
 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48")
 
-(def nums
+#_(def nums
   (->> (clojure.string/split-lines grid)
        (map #(clojure.string/split % #" "))
        flatten
@@ -138,7 +138,7 @@
        (partition 20)
        vec))
 
-(defn safe-nth
+#_(defn safe-nth
   ;; left upper as 0,0
   ;; x: left->right
   ;; y: up->down
@@ -148,7 +148,7 @@
     (nth (nth nums y) x)
     0))
 
-(def results
+#_(def results
 (for [x (range 0 20)
       y (range 0 20)
       :let [;; 4 directions
@@ -172,11 +172,11 @@
             ]]
   [rr dd rd ld]))
 
-(apply max (flatten results))
+#_(apply max (flatten results))
 
 ;; 12: Highly divisible triangular number
 ;; see day 3 for divisors
-(let [i (atom 7)
+#_(let [i (atom 7)
       n (atom 21)]
   (defn tri
     [k]
@@ -185,7 +185,7 @@
       (reset! n ->n)
       ->n)))
 
-(->> (iterate tri 0)
+#_(->> (iterate tri 0)
      ;; "over 500" -> >500 -> 501 -> 499+1+self
      (drop-while #(< (count (factors %)) 499))
      first)
@@ -294,7 +294,7 @@
 20849603980134001723930671666823555245252804609722
 53503534226472524250874054075591789781264330331690")
 
-(->> (clojure.string/split-lines nums)
+#_(->> (clojure.string/split-lines nums)
      (map #(BigInteger. %))
      (reduce +)
      str
@@ -302,7 +302,7 @@
 
 
 ;; 14: Longest Collatz sequence
-(def collatz-count
+#_(def collatz-count
   (memoize
    (fn  [n]
      (loop [->n n
@@ -312,7 +312,7 @@
          (even? ->n) (recur (/ ->n 2) (inc i))
          (odd? ->n)  (recur (+ 1 (* ->n 3)) (inc i)))))))
 
-(->> (range 1 1000000)
+#_(->> (range 1 1000000)
      (map #(collatz-count %))
      (into (sorted-map))
      last)
@@ -322,7 +322,7 @@
 (count-combinations (range 0 40) 20)
 
 ;; 16:
-(->> (reduce * (repeat 1000 2M))
+#_(->> (reduce * (repeat 1000 2M))
      str
      seq
      (map #(+ -48 (int %)))
@@ -357,7 +357,7 @@
        (map #(clojure.string/split % #" "))
        vec))
 
-(defn take-max
+#_(defn take-max
   [line1 line2]
   ;; max(i,j) = tri[i][j] + max(tri[i+1][j], tri[i+1][j+1])
   (loop [i  (dec (count line1))
@@ -372,7 +372,7 @@
           (recur (dec i) (cons r re)))))))
 
 
-(loop [t strtri
+#_(loop [t strtri
        i (- (count strtri) 2)]
   (if (< i 0)
     (-> t (nth 0) (nth 0))
@@ -385,7 +385,7 @@
 ;; 19: Count sundays
 ;; 1 Jan 1901 to 31 Dec 2000
 ;; how many yyyymm01 are Sunday(s)
-(let [cal (java.util.Calendar/getInstance)
+#_(let [cal (java.util.Calendar/getInstance)
       end (java.util.Calendar/getInstance)
       sun (java.util.Calendar/SUNDAY)
       startdate #inst "1901-01-01T06:30:33.240-00:00"
@@ -405,14 +405,14 @@
 ;; 20: Factorial digit sum
 ;; 10! = 10 × 9 × ... × 3 × 2 × 1 = 3628800,
 ;; 3 + 6 + 2 + 8 + 8 + 0 + 0 = 27
-(->> (factorial 100)
+#_(->> (factorial 100)
      str
      seq
      (map #(Character/digit % 10))
      (reduce +))
 
 ;; 21: Amicable numbers
-(let [result (atom [])]
+#_(let [result (atom [])]
   (loop [n 1]
     (if (= n 10000)
       (reduce + 0 @result)
@@ -427,14 +427,14 @@
 
 ;; 22: Names scores
 ;; sort, i*score, sum
-(def names (slurp "https://projecteuler.net/project/resources/p022_names.txt"))
-(defn name->score
+#_(def names (slurp "https://projecteuler.net/project/resources/p022_names.txt"))
+#_(defn name->score
   [name]
   (let [lname  (clojure.string/lower-case name)
         scores (map #(+ -96 (int %)) (seq lname))]
     (reduce + scores)))
 
-(->> (clojure.string/split names #",")
+#_(->> (clojure.string/split names #",")
      (map #(clojure.string/replace % #"\"" ""))
      sort
      (map-indexed (fn [i name] (* (inc i) (name->score name))))
@@ -446,18 +446,18 @@
 ;; - find abundant <= 28123
 ;; - find non
 
-(defn is-abundant?
+#_(defn is-abundant?
   [n]
   (let [ds (divisors n)]
     (< n (reduce + ds))))
 
-(defn not-absum?
+#_(defn not-absum?
   [as n]
   (let [nums   (filter #(< % n) as)
         exists (map #(as (- n %)) nums)]
     (every? nil? exists)))
 
-(let [-as (->> (range 1 28123) (filter is-abundant?))
+#_(let [-as (->> (range 1 28123) (filter is-abundant?))
       as  (into #{} -as)
       nums (->> (range 1 28123) (filter (partial not-absum? as)))]
   (reduce + nums))
@@ -467,7 +467,7 @@
 
 ;; 25: 1000-digit Fibonacci number
 ;; see 2
-(let [a (atom 1M)
+#_(let [a (atom 1M)
       b (atom 2M)
       i (atom 3)]
   (defn fib-indexed
@@ -479,7 +479,7 @@
       [@i c])))
 
 
-(->> (iterate fib-indexed 0)
+#_(->> (iterate fib-indexed 0)
      ;; TODO: why 0 appears first in iterate result?
      rest
      (drop-while #(< (->> % second str count) 1000))
@@ -489,7 +489,7 @@
 
 ;; 26: Reciprocal cycles
 ;; 1/7 => 0.(142857) => 6
-(defn find-reciprocal
+#_(defn find-reciprocal
   ;; https://www.mathblog.dk/project-euler-26-find-the-value-of-d-1000-for-which-1d-contains-the-longest-recurring-cycle/
   [num div]
   (loop [seen (vec (take (inc div) (repeat 0)))
@@ -502,21 +502,21 @@
              (mod (* v 10) div)
              (inc pos)))))
 
-(->> (into (sorted-map) (map  #(find-reciprocal 1 %) (range 1 1000)))
+#_(->> (into (sorted-map) (map  #(find-reciprocal 1 %) (range 1 1000)))
      last
      second)
 
 ;; 27: Quadratic primes
 ;; n^2+an+b , where |a|<1000 and |b|≤1000
 ;; Find the product of the coefficients, a and b, for the quadratic expression that produces the maximum number of primes for consecutive values of n, starting with n=0.
-(defn count-primes
+#_(defn count-primes
   [a b]
   (let [primes (take-while is-prime? (map
                                       #(+ b (* a %) (* % %))
                                       (iterate inc 0)))]
     (count primes)))
 
-(let [max-a (atom 0)
+#_(let [max-a (atom 0)
       max-b (atom 0)
       cur   (atom 0)]
   (loop [a -1000
@@ -535,7 +535,7 @@
 
 ;; 28: Number spiral diagonals
 ;; https://oeis.org/A200975
-(let [n 1001]
+#_(let [n 1001]
   (loop [i   1
          sum 0]
     (if (= i (/ (inc n) 2))
@@ -549,7 +549,7 @@
 
 ;; 29: Distinct powers
 ;; How many distinct terms are in the sequence generated by a^b for 2 ≤ a ≤ 100 and 2 ≤ b ≤ 100?
-(let [seen (atom #{})]
+#_(let [seen (atom #{})]
   (loop [a 2M
          b 2M]
     (if (= a 101M)
@@ -564,7 +564,7 @@
 ;; 30: Digit fifth powers
 ;; Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
 ;; since (exp 9 5) => 59049, take 360000 as upper
-(loop [sum 0
+#_(loop [sum 0
        n   2]
   (if (= n 360000)
     sum
@@ -577,7 +577,7 @@
 ;; How many different ways can £2 be made using any number of coins?
 ;;
 ;; https://www.xarg.org/puzzle/project-euler/problem-31/
-(let [coins [1 2 5 10 20 50 100 200]
+#_(let [coins [1 2 5 10 20 50 100 200]
       n     200 ;; target
       r     (->> (take (inc n) (iterate inc 0))
                  (map #(vec (list % 0)))
@@ -599,7 +599,7 @@
 ;; Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
 ;; http://www.worldofnumbers.com/ninedig1.htm
 ;; 4*1963 is one answer..
-(let [s (atom #{})]
+#_(let [s (atom #{})]
   (loop [a 1
          b 1]
     (if (= a 2000)
@@ -616,7 +616,7 @@
 ;; 33: Digit cancelling fractions
 ;; (/ 49 98)
 
-(defn digit-cancel?
+#_(defn digit-cancel?
   [a b]
   (let [f  (/ a b)
         ad (->> a str seq (map #(- (int %) 48)) vec)
@@ -634,7 +634,7 @@
           (= (/ a1 b1) f)))))
 
 
-(let [f (atom #{})]
+#_(let [f (atom #{})]
   (loop [a 10
          b 10]
     (when (and (digit-cancel? a b)
@@ -651,16 +651,16 @@
 ;; 34: Digit factorials
 ;; 145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
 
-(defn ->digits
+#_(defn ->digits
   [n]
   (->> n str seq (map #(- (int %) 48)) vec))
 
-(defn fact-sum
+#_(defn fact-sum
   [n]
   [n (reduce + (map factorial (->digits n)))])
 
 ;; (fact-sum 9999999) => [9999999 2540160M]
-(->> (range 10M 3000000M)
+#_(->> (range 10M 3000000M)
      (map fact-sum)
      (filter #(= (first %) (second %)))
      (map first)
@@ -672,7 +672,7 @@
 ;; There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, and 97.
 ;; How many circular primes are there below one million?
 ;; https://stackoverflow.com/questions/28721600/idiomatic-string-rotation-in-clojure
-(defn rotations
+#_(defn rotations
   "Returns a lazy seq of all rotations of a seq"
   [x]
   (if (seq x)
@@ -682,12 +682,12 @@
      (iterate inc 0) x)
     (list nil)))
 
-(defn ->rotation
+#_(defn ->rotation
   [n]
   (let [rotations (rotations (str n))]
     (map #(BigDecimal. (apply str %)) rotations)))
 
-(->> (range 2 1000000)
+#_(->> (range 2 1000000)
      (filter #(every? is-prime? (->rotation %)))
      count)
 
@@ -703,7 +703,7 @@
 
 ;; 37: Truncatable primes
 ;;
-(defn truncate-left
+#_(defn truncate-left
   [n]
   (loop [digits (seq (str n))
          nums   []]
@@ -711,7 +711,7 @@
       nums
       (recur (rest digits) (conj nums (BigDecimal. (apply str digits)))))))
 
-(defn truncate-right
+#_(defn truncate-right
   [n]
   (loop [digits (seq (str n))
          nums   []]
@@ -719,7 +719,7 @@
       nums
       (recur (drop-last digits) (conj nums (BigDecimal. (apply str digits)))))))
 
-(->> (iterate inc 9)
+#_(->> (iterate inc 9)
      (filter #(every? is-prime? (concat (truncate-left %)
                                         (truncate-right %))))
      (take 11)
@@ -727,13 +727,13 @@
 
 ;; 38: Pandigital multiples
 ;; greedy cut: 4-digit * 2, 4+5 to pandigital
-(defn double-pan?
+#_(defn double-pan?
   [n]
   (let [k      (* n 2)
         digits (into #{} (str n k))]
     (= digits #{\1 \2 \3 \4 \5 \6 \7 \8 \9})))
 
-(->> (range 9999 5000 -1)
+#_(->> (range 9999 5000 -1)
      (filter double-pan?)
      first)
 
@@ -741,7 +741,7 @@
 ;; a + b + c <= 1000
 ;; a*a+b*b=c*c
 ;; a,b,c => int
-(defn count-triangles
+#_(defn count-triangles
   [p]
 (let [;p     120
       half  (int (/ p 2))
@@ -758,7 +758,7 @@
             (swap! pairs conj #{a b}))
           (recur a (inc b))))))))
 
-(->> (range 20 1000)
+#_(->> (range 20 1000)
      (map count-triangles)
      (into (sorted-map))
      (apply max-key val)
@@ -771,7 +771,7 @@
 ;; d(x) is x th digit
 ;; d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000
 
-(let [digits (->> (iterate inc 0)  ;; since nth is 0-based index
+#_(let [digits (->> (iterate inc 0)  ;; since nth is 0-based index
                   (map str)
                   (apply concat)
                   (take 1000001))]
@@ -780,33 +780,33 @@
 
 ;; 41: Pandigital prime
 ;; all 8&9 digits numbers can be divided by 3 <= 1+2+3..+8=36
-(->> (iterate dec 9999999)
+#_(->> (iterate dec 9999999)
      (filter is-prime?)
      (filter is-pandigital?)
      (take 1))
 
 
 ;; 42: Coded triangle numbers
-(def -words (slurp "https://projecteuler.net/project/resources/p042_words.txt"))
-(def words (map #(str/replace % "\"" "") (str/split -words #",")))
+#_(def -words (slurp "https://projecteuler.net/project/resources/p042_words.txt"))
+#_(def words (map #(str/replace % "\"" "") (str/split -words #",")))
 
-(defn word->score
+#_(defn word->score
   [w]
   (let [l (str/lower-case w)]
     (reduce + (map #(- (int %) 96) (seq l)))))
 
-(def triangles
+#_(def triangles
   (->> (iterate inc 0)
        (take 1000)
        (map #(/ (* % (inc %)) 2))
        (into #{})))
 
-(->> (map word->score words)
+#_(->> (map word->score words)
      (filter #(triangles %))
      count)
 
 ;; 43: Sub-string divisibility
-(->> (permutations [0 1 2 3 4 5 6 7 8 9])
+#_(->> (permutations [0 1 2 3 4 5 6 7 8 9])
      ;; or permutate from 1 0 2 3 4 5 6 6 7 8 9
      (filter #(not= 0 (nth % 0)))
      (filter (fn [coll]
@@ -825,7 +825,7 @@
 ;; 44: Pentagon numbers
 ;; n * (3n-1) / 2
 ;; Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D = |Pk − Pj| is minimised; what is the value of D?
-(let [-nums (->> (iterate inc 1)
+#_(let [-nums (->> (iterate inc 1)
                  (map #(/ (* % (- (* % 3) 1)) 2))
                  (take 2500))
       nums  (vec -nums)
@@ -835,7 +835,7 @@
                                 (numss (+ a b)))))))
 
 ;; 45: Triangular, pentagonal, and hexagonal
-(let [-tri (->> (iterate inc 1)
+#_(let [-tri (->> (iterate inc 1)
                 (map #(/ (* % (inc %)) 2))
                 (take 100000))
       -pen (->> (iterate inc 1)
@@ -848,6 +848,25 @@
       pen  (into #{} -pen)
       hex  (into #{} -hex)]
   (clojure.set/intersection tri pen hex))
+
+
+;; 46: Goldbach's other conjecture
+;; What is the smallest odd composite that cannot be written as the sum of a prime and twice a square?
+(defn is-twice-square?
+  [n]
+  (let [x (Math/sqrt (/ n 2))]
+    (= n (* (int x) (int x)))))
+
+(let [primes (take 10000 (filter is-prime? (iterate inc 1)))
+      squares (take 100 (map #(* 2 % %) (iterate inc 0)))
+      sums (into #{} (for [p primes
+                           s squares]
+                       (+ p s)))]
+  (loop [n 3]
+    (if (sums n)
+      (recur (+ n 2))
+      n)))
+
 
 (defn main
   "I don't do a whole lot."
