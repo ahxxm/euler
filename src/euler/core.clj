@@ -1,6 +1,6 @@
 (ns euler.core
   (:require [clojure.string :as str]
-            [euler.helpers :refer [factors is-palindrome gcd lcm factorial divisors is-prime? exp num->digits is-pandigital? prod-concat-pandigital?]]
+            [euler.helpers :refer :all]
             [clojure.math.combinatorics :as comb :refer [count-combinations permutations]])
   (:gen-class))
 
@@ -880,6 +880,13 @@
       i
       (recur (inc i)))))
 
+;; 48: Find the last ten digits of the series, 11 + 22 + 33 + ... + 10001000.
+#_(->> (range 1M 1001M)
+     (map #(pow % %))
+     (reduce +)
+     str
+     (take-last 10)
+     (apply str))
 
 (defn main
   "I don't do a whole lot."

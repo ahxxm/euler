@@ -36,6 +36,10 @@
   [n]
   (reduce * 1M (range 1 (inc n))))
 
+(defn pow
+  [n x]
+  (reduce * (repeat x n)))
+
 (def divisors
   (memoize (fn [n]
     (conj (factors n) 1))))
