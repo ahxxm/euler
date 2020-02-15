@@ -857,7 +857,7 @@
   (let [x (Math/sqrt (/ n 2))]
     (= n (* (int x) (int x)))))
 
-(let [primes (take 10000 (filter is-prime? (iterate inc 1)))
+#_(let [primes (take 10000 (filter is-prime? (iterate inc 1)))
       squares (take 100 (map #(* 2 % %) (iterate inc 0)))
       sums (into #{} (for [p primes
                            s squares]
@@ -866,6 +866,19 @@
     (if (sums n)
       (recur (+ n 2))
       n)))
+
+
+;; 47: Find the first four consecutive integers to have four distinct prime factors each.
+;; What is the first of these numbers?
+(def count-factors
+  (memoize #(->> (factors %) (filter is-prime?) count)))
+
+#_ (loop [i (* 2 3 5 7)]
+  (let [fs (map count-factors [(+ i 0) (+ i 1)
+                               (+ i 2) (+ i 3)])]
+    (if (every? #(>= % 4) fs)
+      i
+      (recur (inc i)))))
 
 
 (defn main
