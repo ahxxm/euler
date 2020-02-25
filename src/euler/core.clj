@@ -888,6 +888,47 @@
      (take-last 10)
      (apply str))
 
+;; 49: Prime permutations
+;; 1487, 4817, 8147
+;; (i) each of the three terms are prime, and,
+;; (ii) each of the 4-digit numbers are permutations of one another.
+
+(defn perm->num
+  ;; 4 Character
+  [perm]
+  (->> perm
+       (apply str)
+       (BigDecimal.)))
+
+(defn incr-sequence?
+  [[a b c]]
+  (= (- a b) (- b c)))
+
+(defn perm-incr?
+  [[counter _]]
+  (let [;;counter {1 1, 2 1, 3 1, 7 1}
+        digits (mapcat (fn [[x n]] (repeat n x)) counter)
+        perms (comb/permutations digits)
+        perm-primes (filter is-prime? (map perm->num perms))
+        choices (comb/combinations perm-primes 3)]
+    ;; any choose 3 from list can form an Arithmetic sequence
+    (not-empty (filter incr-sequence? choices))))
+
+#_(->> (range 1000 10000)
+     (filter is-prime?)
+     (map str)
+     (map frequencies)
+     (frequencies)
+     (filter #(>= (val %) 3))
+     (sort-by val >)
+     (filter perm-incr?)) ;; => [{\2 1, \6 1, \9 2} 4]
+
+#_(->> {\2 1, \6 1, \9 2}
+     (mapcat (fn [[x n]] (repeat n x)))
+     (comb/permutations)
+     (map perm->num)
+     (filter is-prime?))
+
 (defn main
   "I don't do a whole lot."
   [x]
