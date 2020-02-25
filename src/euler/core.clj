@@ -929,6 +929,20 @@
      (map perm->num)
      (filter is-prime?))
 
+;; 50: Consecutive prime sum
+;; Which prime, below one-million, can be written as the sum of the most consecutive primes?
+
+#_ (apply max
+(for [n [2 3 5 7 11 13 17]]
+  (loop [sum [n]
+         p   (filter is-prime? (iterate inc (inc n)))]
+    (let [prime (first p)
+          -last (last sum)
+          -sum (+ -last prime)]
+      (if (> -sum 1000000)
+        (last (filter is-prime? sum))
+        (recur (conj sum -sum) (rest p)))))))
+
 (defn main
   "I don't do a whole lot."
   [x]
