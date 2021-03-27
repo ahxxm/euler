@@ -943,6 +943,44 @@
         (last (filter is-prime? sum))
         (recur (conj sum -sum) (rest p)))))))
 
+
+;; 51: https://www.mathblog.dk/project-euler-51-eight-prime-family/
+(defn primes-under2 [n]
+  (let [sieve (transient (set (cons 2 (range 3 n 2))))]
+    (loop [s sieve
+           f 3]
+      (cond (> (* f f) n) (persistent! s)
+            :else (recur (reduce disj! s (range (* f f) n f)) (inc f))))))
+
+
+
+#_(time (count (primes-under2 10000000)))
+
+
+;; 52: Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain the same digits.
+(defn mul-6
+  [n]
+  (let [nums (map #(* % n) (range 2 7))]
+    (conj nums n)))
+
+(defn ->digits-set
+  [n]
+  (->> n
+     str
+     vec
+     (into #{})))
+
+(defn solve
+  ;; => 142857
+  []
+  (loop [i 1]
+    (let [nums (map ->digits-set (mul-6 i))
+          numset (into #{} nums)]
+      (if (= 1 (count numset))
+        i
+        (recur (inc i))))))
+
+
 (defn main
   "I don't do a whole lot."
   [x]
