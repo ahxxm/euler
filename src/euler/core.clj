@@ -996,6 +996,38 @@
     (reduce + (map count results))))
 
 
+;; 54: skip
+
+;; 55: A number that never forms a palindrome through the reverse and add process is called a Lychrel number.
+;; In addition you are given that for every number below ten-thousand, it will either (i) become a palindrome in less than fifty iterations,
+;; How many Lychrel numbers are there below ten-thousand?
+
+(defn sum-reverse
+  [n]
+  (let [reversed (BigDecimal. (->> n
+                                (str)
+                                (reverse)
+                                (clojure.string/join)))]
+    (+ reversed n)))
+
+(defn is-lychrel?
+  [n]
+  (loop [i 0
+         k n]
+    (if (> i 50)
+      true
+      (let [sum (sum-reverse k)]
+        (if (is-palindrome sum)
+          false
+          (recur (inc i) sum))))))
+
+(defn solve-55
+  []
+  (let [results (map is-lychrel? (range 0 10001))]
+    (count (filter true? results))))
+
+
+
 (defn main
   "I don't do a whole lot."
   [x]
