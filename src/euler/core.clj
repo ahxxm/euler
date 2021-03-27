@@ -1045,7 +1045,30 @@
                                   (BigDecimal. b))))]
     (apply max results)))
 
-(solve-56)
+;; 57: Square root convergents
+
+(defn count-digits
+  [n]
+  (->> n
+       str
+       vec
+       count))
+
+(defn solve-57
+  [n]
+  (loop [a 2M
+         b 3M
+         i 0  ;; iteration
+         m 0] ;; count
+    (if (> i n)
+      m
+    (let [c (+ a b)  ;; the new a
+          d (+ a c)] ;; the new b, frac being b/a
+      (if (> (count-digits d)
+             (count-digits c))
+        (recur c d (inc i) (inc m))
+        (recur c d (inc i) m))))))
+
 
 (defn main
   "I don't do a whole lot."
