@@ -970,7 +970,7 @@
      vec
      (into #{})))
 
-(defn solve
+(defn solve-52
   ;; => 142857
   []
   (loop [i 1]
@@ -979,6 +979,21 @@
       (if (= 1 (count numset))
         i
         (recur (inc i))))))
+
+
+;; 53: How many, not necessarily distinct, values of (choose n r), where r<=n, 1<n<=100
+;; are >=1000000
+(defn all-valid-combo
+  [n]
+  (let [items (range 0 n)
+        combos (for [i (range 1 n)]
+                 (comb/count-combinations items i))]
+    (filter #(> % 1000000) combos)))
+
+(defn solve-53
+  []
+  (let [results (map all-valid-combo (range 1 101))]
+    (reduce + (map count results))))
 
 
 (defn main
