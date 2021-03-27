@@ -1027,6 +1027,25 @@
     (count (filter true? results))))
 
 
+;; 56: Powerful digit sum
+;; a**b where a,b<100
+(defn digit-sum
+  [n]
+  (->> n
+       (str)
+       (vec)
+       (map #(- (int %) 48))
+       (reduce +)))
+
+(defn solve-56
+  []
+  (let [results (for [a (range 0 101)
+                      b (range 0 101)]
+                  (digit-sum (pow (BigDecimal. a)
+                                  (BigDecimal. b))))]
+    (apply max results)))
+
+(solve-56)
 
 (defn main
   "I don't do a whole lot."
