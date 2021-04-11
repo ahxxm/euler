@@ -1069,6 +1069,85 @@
         (recur c d (inc i) (inc m))
         (recur c d (inc i) m))))))
 
+;; 58: Spiral Primes
+;; Starting with 1 and spiralling anticlockwise
+;; 5 4 3
+;; 6 1 2
+;; 7 8 9
+;; what is the side length of the square spiral for which the ratio of primes along both diagonals first falls below 10%?
+
+(defn assoc-vov
+  [v x y val]
+  (let [-line (nth v y)
+        line  (assoc -line x val)]
+    (assoc v y line)))
+
+(defn should-turn
+  [x y n dir v]
+  (let [[-x -y] dir
+        x (+ x -x)
+        y (+ y -y)]
+    (if (or (< x 0) (>= x n)
+            (< y 0) (>= y n))
+      true ;; out of bound, or value already set
+      (not= (nth (nth v y) x) 0))))
+
+
+(defn gen-spiral ;; use 1-d array?
+  [n]
+  ;; n should be 2*k+1
+  ;; init with southeast value, spiral inside until 1
+  ;; return vector of vector
+  (let [sqrt   (* n n)
+        line   (vec (repeat n 0))
+        lines  (vec (repeat n line))
+        dirs   [[-1 0] [0 -1] [1 0] [0 1]]] ;; filler direction always start with <-
+    ;; fill the square spiral
+    (loop [i   sqrt
+           dir 0
+           x   (dec n)
+           y   (dec n)
+           v   lines]
+      (if (= i 1)
+        (assoc-vov v x y i)
+        (let [-dir     (nth dirs (mod dir 4))
+              turn?   (should-turn x y n -dir v)
+              [-x -y] -dir]
+          ;; if turn then don't assoc, just change direction
+          ;; else assoc and process
+          (if turn?
+            (recur i (inc dir) x y v)
+            (recur (dec i) dir (+ x -x) (+ y -y) (assoc-vov v x y i))))))))
+
+
+(defn diag-nums
+  [v]
+  (let [n (count (nth v 0))]
+    (loop [i    0
+           vals []]
+      (if (= i n)
+        vals
+        (let [line (nth v i)]
+          ;; 1-2 nums, 1 for midpoint
+          (if (= n (inc (* i 2)))
+            (recur (inc i) (conj vals (nth line i)))
+            (recur (inc i) (conj vals (nth line i) (nth line (- n i 1))))))))))
+
+(defn cant-solve-58
+  ;; the answer is 26xxx though
+  []
+  (loop [i 10000]
+    (let [n (inc (* i 2))
+          spiral (gen-spiral n)
+          nums (diag-nums spiral)
+          primes (filter is-prime? nums)
+          ratio (/ (count primes) (count nums))]
+      (if (< ratio 0.1)
+        n
+        (recur (+ i 10000))))))
+
+
+
 
 (defn main
   "I don't do a whole lot."
