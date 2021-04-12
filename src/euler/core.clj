@@ -1146,6 +1146,20 @@
         n
         (recur (+ i 10000))))))
 
+(defn solve-58
+  ;; only generate diagnal numbers
+  []
+  (loop [sl 4  ;; next len
+         c  9  ;; cornor
+         p  3] ;; primes
+    (let [x (+ c sl)
+          y (+ x sl)
+          z (+ y sl) ;; next 3 numbers
+          p (+ p (->> [x y z] (filter is-prime?) count))
+          ratio (/ p (inc (* 2 sl)))]
+      (if (< ratio 0.1)
+        (inc sl)
+        (recur (+ sl 2) (+ z sl) p)))))
 
 
 
