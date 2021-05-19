@@ -107,3 +107,21 @@
          (solver-61)
          (map first)
          (reduce +))))
+
+
+(defn solve-62
+  ;; Find the smallest cube for which exactly five permutations of its digits are cube.
+  []
+  (loop [i 2
+         m {}]
+    (let [s (frequencies (str (* i i i)))
+          c (m s)]
+      (if (= s (frequencies "589323567104"))
+        (* i i i)
+        (recur (inc i) m))
+      #_(if (nil? c)
+        (recur (inc i) (assoc m s 1))
+        (if (= c 4) ;; found the last one
+          (* i i i) ;; 589323567104
+          (recur (inc i) (assoc m s (inc c)))))
+      )))
