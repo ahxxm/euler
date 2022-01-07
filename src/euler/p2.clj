@@ -5,43 +5,35 @@
   (:gen-class))
 
 
-
-
-
 ;; problem 60-119
 (defn concat-prime?
   [[a b]]
   (and (->> [a b]
             (apply str)
-            (bigdec)
+            (Integer/parseInt)
             (is-prime?))
        (->> [b a]
             (apply str)
-            (bigdec)
+            (Integer/parseInt)
             (is-prime?))))
-
-(defn select-distinct
-  [items n]
-  (let [selections (comb/selections items n)]
-    (filter #(= (count %)
-                (count (distinct %))) selections)))
 
 (defn all-concat-prime?
   [v]
-  (let [choices    (select-distinct v 2)
-        non-primes (drop-while true? (map concat-prime? choices))]
-    (nil? (first non-primes))))
+  (let [choices (comb/combinations v 2)]
+    (every? true? (map concat-prime? choices))))
 
 (defn solve-60
   [] ;; FIXME: slow
   (let [primes (->> (iterate inc 3)
                     (filter is-prime?)
                     (take-while #(< % 8500))
-                    (map #(BigDecimal. %))
-                    vec)
-        sels    (select-distinct primes 5)
-        choices (filter all-concat-prime? sels)]
-    (reduce + (first choices))))
+                    vec)]
+    (->> (comb/combinations primes 4)
+         (pmap (fn [s]
+                 (if (all-concat-prime? s) s)))
+         (drop-while nil?)
+         (first)
+         (reduce +))))
 
 (defn take-4digit
   ;; figurate numbers f(n)
@@ -125,3 +117,44 @@
           (* i i i) ;; 589323567104
           (recur (inc i) (assoc m s (inc c)))))
       )))
+
+
+(defn solve-63
+  []
+  ;; copied from mathblog
+  (loop [l 0
+         r 0
+         n 1]
+    (if (>= l 10)
+      r
+      (let [p (Math/pow 10M (/ (- n 1.0) n))
+            l (bigdec (Math/ceil p))]
+        (recur l (+ r (- 10M l)) (inc n))))))
+
+
+(defn odd-periodic?
+  [n]
+  (let [limit (int (Math/sqrt n))]
+    (loop [p 0 ;; for period
+           d 1
+           m 0
+           a limit]
+      (let [-m (- (* a d) m)
+            -d (int (/ (- n (* -m -m)) d))
+            -a (int (/ (+ limit -m) -d))
+            -p (inc p)]
+        (if (= (* 2 limit) -a)
+          (odd? -p)
+          (recur -p -d -m -a))))))
+
+(defn not-square?
+  [p]
+  (let [n (-> p Math/sqrt int)]
+    (not= p (* n n))))
+
+(defn solve-64
+  []
+  (let [nums (->> (iterate inc 2) ;; includes 2
+                  (filter not-square?)
+                  (take-while #(<= % 10000)))]
+    (count (filter odd-periodic? nums))))
